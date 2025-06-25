@@ -144,14 +144,12 @@ class FilterWheel:
     def EFWOpen(self, ids: int) -> bool:
         """Open filter wheel."""
 
-        self._efw.EFWOpen(c_int(ids))
-        return True
+        return not self._efw.EFWOpen(c_int(ids))
 
     def EFWClose(self, ids: int) -> bool:
         """Close filter wheel."""
 
-        self._efw.EFWClose(c_int(ids))
-        return True
+        return not self._efw.EFWClose(c_int(ids))
 
     def EFWGetProperty(self, ids: int) -> EFW_INFO:
         """Get property of filter wheel. SlotNum is 0 if not opened."""
@@ -172,16 +170,14 @@ class FilterWheel:
     def EFWSetPosition(self, ids: int, position: int) -> bool:
         """Set position of slot."""
 
-        self._efw.EFWSetPosition(c_int(ids), c_int(position))
-        return True
+        return not self._efw.EFWSetPosition(c_int(ids), c_int(position))
 
     def EFWSetDirection(self, ids: int, direction: bool) -> bool:
         """Set unidirection of filter wheel. If set as true, the filter wheel
         will rotate along one direction.
         """
 
-        self._efw.EFWSetDirection(c_int(ids), c_bool(direction))
-        return True
+        return not self._efw.EFWSetDirection(c_int(ids), c_bool(direction))
 
     def EFWGetDirection(self, ids: int) -> bool:
         """Get unidirection of filter wheel."""
@@ -194,8 +190,7 @@ class FilterWheel:
     def EFWCalibrate(self, ids: int) -> bool:
         """Calibrate filter wheel."""
 
-        self._efw.EFWCalibrate(c_int(ids))
-        return True
+        return not self._efw.EFWCalibrate(c_int(ids))
 
     def EFWGetSDKVersion(self) -> bytes:
         """Get version string."""
@@ -231,8 +226,7 @@ class FilterWheel:
     def EFWSetID(self, ids: int, efw_id: EFW_ID) -> bool:
         """Set the alias to a EFW."""
 
-        self._efw.EFWSetID(c_int(ids), efw_id)
-        return True
+        return not self._efw.EFWSetID(c_int(ids), efw_id)
 
 
 __all__ = ["FilterWheel"]

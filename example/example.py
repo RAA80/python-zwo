@@ -8,7 +8,6 @@ if __name__ == "__main__":
     wheel = FilterWheel()
 
     print(f"EFWGetNum = {wheel.EFWGetNum()}")
-    print(f"EFWGetProductIDs = {wheel.EFWGetProductIDs()}")
 
     ids = wheel.EFWGetID(0)
     print(f"EFWGetID = {ids}")
@@ -24,6 +23,7 @@ if __name__ == "__main__":
     print(f"EFWGetPosition = {wheel.EFWGetPosition(ids)}")
     print(f"EFWSetPosition = {wheel.EFWSetPosition(ids, 0)}")
 
+    # print(f"EFWGetProductIDs = {wheel.EFWGetProductIDs()}")
     # print(f"EFWSetDirection = {wheel.EFWSetDirection(ids, False)}")
     # print(f"EFWGetDirection = {wheel.EFWGetDirection(ids)}")
     # print(f"EFWCalibrate = {wheel.EFWCalibrate(ids)}")
