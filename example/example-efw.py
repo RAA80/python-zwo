@@ -30,9 +30,6 @@ if __name__ == "__main__":
     # print(f"EFWGetSDKVersion = {wheel.EFWGetSDKVersion()}")
     # print(f"EFWGetHWErrorCode = {wheel.EFWGetHWErrorCode(ids)}")
     # print(f"EFWGetFirmwareVersion = {wheel.EFWGetFirmwareVersion(ids)}")
-
-    # ser_num = wheel.EFWGetSerialNumber(ids)
-    # print(f"EFWGetSerialNumber = {ser_num}")
-    # print(f"    id = {ser_num.id}")
+    # print(f"EFWGetSerialNumber = {wheel.EFWGetSerialNumber(ids)}")
 
     print(f"EFWClose = {wheel.EFWClose(ids)}")

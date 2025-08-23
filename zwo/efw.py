@@ -6,7 +6,7 @@ from __future__ import annotations
 
 import os
 from ctypes import (CDLL, CFUNCTYPE, POINTER, RTLD_GLOBAL, Structure, byref,
-                    c_bool, c_char, c_char_p, c_int, c_ubyte, c_void_p, cdll)
+                    c_bool, c_char, c_char_p, c_int, c_ubyte, c_void_p)
 from enum import IntEnum, auto
 from functools import partial
 from platform import architecture
@@ -19,7 +19,7 @@ if TYPE_CHECKING:
 def _load_lib(arch: str, name: str) -> CDLL:
     if os.name == "posix":
         CDLL("libudev.so", mode=RTLD_GLOBAL)
-    return cdll.LoadLibrary(os.path.join(os.path.dirname(__file__), "libs", "efw", arch, name))
+    return CDLL(os.path.join(os.path.dirname(__file__), "libs", arch, name))
 
 
 arch = {"posix": {"32bit": ("linux32", "libEFWFilter.so"),
@@ -98,7 +98,7 @@ class ZwoEfwDevice(c_void_p):
 
         special_names = {"EFWGetNum", "EFWGetProductIDs", "EFWGetSDKVersion"}
         if result and self.name not in special_names:
-            msg = f"{self.name} error {result} ({EFW_ERROR_CODE(result).name})"
+            msg = EFW_ERROR_CODE(result).name
             raise ZwoFilterWheelError(msg)
 
         return result
@@ -124,9 +124,7 @@ class FilterWheel:
         return self._efw.EFWGetNum()
 
     def EFWGetProductIDs(self) -> tuple[int, ...]:
-        """Get the product ID of each wheel, at first set pPIDs as 0 and get
-        length and then malloc a buffer to load the PIDs.
-        """
+        """Get the product ID of each wheel."""
 
         pid_array = (c_int * EFW_ID_MAX)(0)
 
@@ -192,10 +190,10 @@ class FilterWheel:
 
         return not self._efw.EFWCalibrate(c_int(ids))
 
-    def EFWGetSDKVersion(self) -> bytes:
+    def EFWGetSDKVersion(self) -> str:
         """Get version string."""
 
-        return bytes(self._efw.EFWGetSDKVersion())
+        return bytes(self._efw.EFWGetSDKVersion()).decode("ascii")
 
     def EFWGetHWErrorCode(self, ids: int) -> int:
         """Get hardware error code of filter wheel."""
@@ -205,7 +203,7 @@ class FilterWheel:
         self._efw.EFWGetHWErrorCode(c_int(ids), byref(errcode))
         return errcode.value
 
-    def EFWGetFirmwareVersion(self, ids: int) -> tuple[int, ...]:
+    def EFWGetFirmwareVersion(self, ids: int) -> str:
         """Get firmware version of filter wheel."""
 
         major = c_ubyte()
@@ -213,15 +211,15 @@ class FilterWheel:
         build = c_ubyte()
 
         self._efw.EFWGetFirmwareVersion(c_int(ids), byref(major), byref(minor), byref(build))
-        return (major.value, minor.value, build.value)
+        return f"{major.value}.{minor.value}.{build.value}"
 
-    def EFWGetSerialNumber(self, ids: int) -> EFW_ID:
+    def EFWGetSerialNumber(self, ids: int) -> int:
         """Get the serial number from a EFW."""
 
         serial = EFW_ID()
 
         self._efw.EFWGetSerialNumber(c_int(ids), byref(serial))
-        return serial
+        return int.from_bytes(serial.id, "big")
 
     def EFWSetID(self, ids: int, efw_id: EFW_ID) -> bool:
         """Set the alias to a EFW."""

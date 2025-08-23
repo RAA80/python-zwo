@@ -1,12 +1,12 @@
 # python-zwo #
 
-Библиотека для работы с колесом фильтров ZWO
+Библиотека для работы с устройствами ZWO
 
 ## Установка в ОС Linux ##
 
 - установить пакет `libudev-dev`
-- установить файл `efw.rules` из папки `rules` командой `sudo install efw.rules /etc/udev/rules.d`
-- переподсоединить устройство ZWO
+- установить rules-файлы из папки `rules` командой `sudo install *.rules /etc/udev/rules.d`
+- подсоединить устройство ZWO
 - установить библиотеку `python-zwo`
 
 ## Установка в ОС Windows ##
